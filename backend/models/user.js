@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -18,11 +19,26 @@ const userSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        return /https?:\/\/(www\.)?.{1,}/gm.test(v);
+        return validator.isURL(v);
       },
       message: 'É necessário um link válido.',
     },
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    validate: {
+      validator(v) {
+        return validator.isEmail(v);
+      },
+      message: 'É necessário um email válido.'
+    }
+  },
+  password: {
+    type: String,
+    required: true
+  }
 });
 
 module.exports = mongoose.model('user', userSchema);
