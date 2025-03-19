@@ -1,0 +1,28 @@
+{
+  "name": "web_project_around_express",
+  "version": "1.0.0",
+  "keywords": [
+    "API",
+    "JavaScript"
+  ],
+  "description": "",
+  "main": "app.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node ./app.js",
+    "dev": "nodemon ./app.js",
+    "lint": "npx eslint ."
+  },
+  "author": "Letícia Goliczevski Medeiros",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.31.0",
+    "nodemon": "^3.1.7"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongoose": "^8.9.4"
+  }
+}
