@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 const INVALID_DATA = 400;
@@ -86,6 +87,20 @@ function updateProfileAvatar(req, res) {
     });
 }
 
+function login(req, res) {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+  .then((user)=> {
+    const token = jwt.sign({ _id: user._id }, 'chave', { expiresIn: '7d' });
+
+    res.send({token});
+  })
+  .catch((error)=> {
+    res.status(401).send({ message: error.message });
+  })
+}
+
 module.exports = {
-  getUsers, getUser, createUser, updateProfileInfo, updateProfileAvatar,
+  getUsers, getUser, createUser, updateProfileInfo, updateProfileAvatar, login,
 };
