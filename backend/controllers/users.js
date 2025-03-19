@@ -28,19 +28,6 @@ function getUser(req, res) {
 function createUser(req, res) {
   const { name, about, avatar, email, password } = req.body;
 
-  if (!name || !about || !avatar) {
-    res.status(INVALID_DATA).send({ message: 'Não foi possível criar o usuário. Dados incompletos.' });
-    return;
-  }
-
-  const avatarRegex = /https?:\/\/(www\.)?.{1,}/;
-  const isAvatarValid = avatar.match(avatarRegex);
-
-  if (!isAvatarValid) {
-    res.status(INVALID_DATA).send({ message: `Não foi possível criar o usuário ${name}. Link do avatar inválido.` });
-    return;
-  }
-
   bcrypt.hash(password, 10)
   .then((hash)=> User.create({ name, about, avatar, email, password: hash}))
   .then((user) => res.status(201).send(user))
