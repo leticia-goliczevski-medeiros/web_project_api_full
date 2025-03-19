@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 
 const INVALID_DATA = 400;
@@ -25,7 +26,7 @@ function getUser(req, res) {
 }
 
 function createUser(req, res) {
-  const { name, about, avatar } = req.body;
+  const { name, about, avatar, email, password } = req.body;
 
   if (!name || !about || !avatar) {
     res.status(INVALID_DATA).send({ message: 'Não foi possível criar o usuário. Dados incompletos.' });
@@ -40,11 +41,12 @@ function createUser(req, res) {
     return;
   }
 
-  User.create({ name, about, avatar })
-    .then((user) => res.status(201).send(user))
-    .catch(() => {
-      res.status(SERVER_ERROR).send({ message: `Não foi possível criar o usuário ${name}` });
-    });
+  bcrypt.hash(password, 10)
+  .then((hash)=> User.create({ name, about, avatar, email, password: hash}))
+  .then((user) => res.status(201).send(user))
+  .catch(() => {
+    res.status(SERVER_ERROR).send({ message: `Não foi possível criar o usuário ${name}` });
+  })
 }
 
 function updateProfileInfo(req, res) {
