@@ -4,6 +4,7 @@ const { celebrate, Joi } = require('celebrate');
 const { createUser, login } = require('./controllers/users');
 const { cardsRouter } = require('./routes/cards');
 const { userRouter } = require('./routes/users');
+const { authorize } = require('./middlewares/auth');
 
 const app = express();
 const PORT = 3000;
@@ -31,8 +32,8 @@ app.post('/signup', celebrate({
   })
 }), createUser);
 
-app.use('/cards', cardsRouter);
-app.use('/users', userRouter);
+app.use('/cards', authorize, cardsRouter);
+app.use('/users', authorize, userRouter);
 app.use('/', (req, res) => {
   res.status(404).send({ message: 'A solicitação não foi encontrada' });
 });

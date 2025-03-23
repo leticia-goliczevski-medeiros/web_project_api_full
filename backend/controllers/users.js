@@ -26,12 +26,23 @@ function getUser(req, res) {
     });
 }
 
+function getUserInfo(req, res) {
+  const { userId } = req.user._id;
+
+  User.findById(userId)
+  .orFail()
+  .then((user)=> res.send(user))
+  .catch(()=> {
+    res.status(DOCUMENT_NOT_FOUND).send({ message: `Não foi possível encontrar o usuário com o id ${id}` });
+  })
+}
+
 function createUser(req, res) {
   const { name, about, avatar, email, password } = req.body;
 
   bcrypt.hash(password, 10)
   .then((hash)=> User.create({ name, about, avatar, email, password: hash}))
-  .then((user) => res.status(201).send(user))
+  .then((user) => res.status(201).send({ email: user.email, _id: user._id}))
   .catch(() => {
     res.status(SERVER_ERROR).send({ message: `Não foi possível criar o usuário ${name}` });
   })
@@ -102,5 +113,5 @@ function login(req, res) {
 }
 
 module.exports = {
-  getUsers, getUser, createUser, updateProfileInfo, updateProfileAvatar, login,
+  getUsers, getUser, createUser, updateProfileInfo, updateProfileAvatar, login, getUserInfo,
 };
