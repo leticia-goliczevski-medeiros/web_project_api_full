@@ -27,7 +27,7 @@ function getUser(req, res) {
 }
 
 function getUserInfo(req, res) {
-  const { userId } = req.user._id;
+  const userId = req.user._id;
 
   User.findById(userId)
   .orFail()
