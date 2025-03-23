@@ -13,14 +13,6 @@ mongoose.connect('mongodb://0.0.0.0:27017/aroundb');
 
 app.use(express.json());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '678f8f17a6dfa35e58861fa0',
-  };
-
-  next();
-});
-
 app.post('/signin', login);
 app.post('/signup', celebrate({
   body: Joi.object().keys({
