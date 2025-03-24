@@ -1,60 +1,68 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const validator = require('validator');
 const User = require('../models/user');
+const NotFoundError = require('../errors/notFoundError');
+const ServerError = require('../errors/serverError');
+const InvalidDataError = require('../errors/invalidDataError');
 
-const INVALID_DATA = 400;
-const DOCUMENT_NOT_FOUND = 404;
-const SERVER_ERROR = 500;
+// function getUsers(req, res) {
+//   User.find({})
+//     .orFail()
+//     .then((user) => res.send(user))
+//     .catch((error) => {
+//       res.status(DOCUMENT_NOT_FOUND).send({ message: `Não foi possível encontrar usuários: ${error}` });
+//     });
+// }
 
-function getUsers(req, res) {
-  User.find({})
-    .orFail()
-    .then((user) => res.send(user))
-    .catch((error) => {
-      res.status(DOCUMENT_NOT_FOUND).send({ message: `Não foi possível encontrar usuários: ${error}` });
-    });
-}
+// function getUser(req, res) {
+//   const { id } = req.params;
 
-function getUser(req, res) {
-  const { id } = req.params;
+//   User.findById(id)
+//     .orFail()
+//     .then((user) => res.send(user))
+//     .catch(() => {
+//       res.status(DOCUMENT_NOT_FOUND).send({ message: `Não foi possível encontrar o usuário com o id ${id}` });
+//     });
+// }
 
-  User.findById(id)
-    .orFail()
-    .then((user) => res.send(user))
-    .catch(() => {
-      res.status(DOCUMENT_NOT_FOUND).send({ message: `Não foi possível encontrar o usuário com o id ${id}` });
-    });
-}
-
-function getUserInfo(req, res) {
+function getUserInfo(req, res, next) {
   const userId = req.user._id;
 
   User.findById(userId)
-  .orFail()
+  .orFail(()=> {
+      throw new NotFoundError(`Não foi possível encontrar o usuário com o id ${id}`);
+    }
+  )
   .then((user)=> res.send(user))
-  .catch(()=> {
-    res.status(DOCUMENT_NOT_FOUND).send({ message: `Não foi possível encontrar o usuário com o id ${id}` });
+  .catch((error)=> {
+    next(error);
   })
 }
 
-function createUser(req, res) {
+function createUser(req, res, next) {
   const { name, about, avatar, email, password } = req.body;
 
   bcrypt.hash(password, 10)
   .then((hash)=> User.create({ name, about, avatar, email, password: hash}))
-  .then((user) => res.status(201).send({ email: user.email, _id: user._id}))
-  .catch(() => {
-    res.status(SERVER_ERROR).send({ message: `Não foi possível criar o usuário ${name}` });
+  .then((user) => {
+    if(!user) {
+      throw new ServerError(`Não foi possível criar o usuário ${name}`)
+    }
+
+    res.status(201).send({ email: user.email, _id: user._id})
+  })
+  .catch((error) => {
+    next(error);
   })
 }
 
-function updateProfileInfo(req, res) {
+function updateProfileInfo(req, res, next) {
   const userId = req.user._id;
   const { name, about } = req.body;
 
   if (!name || !about) {
-    res.status(INVALID_DATA).send({ message: 'Não foi possível atualizar os dados do usuário. Dados incompletos.' });
-    return;
+    throw new InvalidDataError('Não foi possível atualizar os dados do usuário. Dados incompletos.')
   }
 
   User.findByIdAndUpdate(userId, { name, about }, {
@@ -62,28 +70,27 @@ function updateProfileInfo(req, res) {
     runValidators: true,
     upsert: false,
   })
-    .orFail()
-    .then((user) => res.send(user))
-    .catch(() => {
-      res.status(SERVER_ERROR).send({ message: `Não foi possível atualizar o usuário ${name}` });
-    });
+  .orFail(()=> {
+    throw new ServerError(`Não foi possível atualizar o usuário ${name}`);
+  })
+  .then((user) => res.send(user))
+  .catch((error) => {
+    next(error);
+  });
 }
 
-function updateProfileAvatar(req, res) {
+function updateProfileAvatar(req, res, next) {
   const userId = req.user._id;
   const { avatar } = req.body;
 
   if (!avatar) {
-    res.status(INVALID_DATA).send({ message: 'Não foi possível atualizar a foto do usuário. Dados incompletos.' });
-    return;
+    throw new InvalidDataError('Não foi possível atualizar a foto do usuário. Dados incompletos.');
   }
 
-  const avatarRegex = /https?:\/\/(www\.)?.{1,}/;
-  const isAvatarValid = avatar.match(avatarRegex);
+  const isAvatarValid = validator.isURL(avatar);
 
   if (!isAvatarValid) {
-    res.status(INVALID_DATA).send({ message: 'Não foi possível atualizar a foto de usuário. Link do avatar inválido.' });
-    return;
+    throw new InvalidDataError('Não foi possível atualizar a foto de usuário. Link do avatar inválido.');
   }
 
   User.findByIdAndUpdate(userId, { avatar }, {
@@ -91,14 +98,16 @@ function updateProfileAvatar(req, res) {
     runValidators: true,
     upsert: false,
   })
-    .orFail()
+    .orFail(()=> {
+      throw new ServerError(`Não foi possível atualizar a foto de usuário.`);
+    })
     .then((user) => res.send(user))
     .catch((error) => {
-      res.status(SERVER_ERROR).send({ message: `Não foi possível atualizar a foto de usuário. ${error}` });
+      next(error);
     });
 }
 
-function login(req, res) {
+function login(req, res, next) {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
@@ -108,10 +117,10 @@ function login(req, res) {
     res.send({token});
   })
   .catch((error)=> {
-    res.status(401).send({ message: error.message });
+    next(error);
   })
 }
 
 module.exports = {
-  getUsers, getUser, createUser, updateProfileInfo, updateProfileAvatar, login, getUserInfo,
+  getUserInfo, createUser, updateProfileInfo, updateProfileAvatar, login,
 };

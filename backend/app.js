@@ -30,6 +30,12 @@ app.use('/', (req, res) => {
   res.status(404).send({ message: 'A solicitação não foi encontrada' });
 });
 
+app.use((error, req, res, next)=> {
+  const {statusCode = 500, message = 'Ocorreu um erro no servidor'} = error;
+
+  res.status(statusCode).send({ message })
+})
+
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);
 });
