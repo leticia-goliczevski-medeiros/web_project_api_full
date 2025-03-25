@@ -6,26 +6,6 @@ const NotFoundError = require('../errors/notFoundError');
 const ServerError = require('../errors/serverError');
 const InvalidDataError = require('../errors/invalidDataError');
 
-// function getUsers(req, res) {
-//   User.find({})
-//     .orFail()
-//     .then((user) => res.send(user))
-//     .catch((error) => {
-//       res.status(DOCUMENT_NOT_FOUND).send({ message: `Não foi possível encontrar usuários: ${error}` });
-//     });
-// }
-
-// function getUser(req, res) {
-//   const { id } = req.params;
-
-//   User.findById(id)
-//     .orFail()
-//     .then((user) => res.send(user))
-//     .catch(() => {
-//       res.status(DOCUMENT_NOT_FOUND).send({ message: `Não foi possível encontrar o usuário com o id ${id}` });
-//     });
-// }
-
 function getUserInfo(req, res, next) {
   const userId = req.user._id;
 
