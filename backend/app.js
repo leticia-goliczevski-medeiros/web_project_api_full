@@ -5,6 +5,7 @@ const { createUser, login } = require('./controllers/users');
 const { cardsRouter } = require('./routes/cards');
 const { userRouter } = require('./routes/users');
 const { authorize } = require('./middlewares/auth');
+const { validateURL, validateEmail } = require('./middlewares/validation');
 
 const app = express();
 const PORT = 3000;
@@ -13,13 +14,18 @@ mongoose.connect('mongodb://0.0.0.0:27017/aroundb');
 
 app.use(express.json());
 
-app.post('/signin', login);
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().custom(validateEmail).required(),
+    password: Joi.string().required()
+  })
+}), login);
 app.post('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().uri(),
-    email: Joi.string().email().required(),
+    avatar: Joi.string().custom(validateURL),
+    email: Joi.string().custom(validateEmail).required(),
     password: Joi.string().required().min(8),
   })
 }), createUser);
