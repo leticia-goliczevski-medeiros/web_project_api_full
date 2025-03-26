@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const { cardsRouter } = require('./routes/cardsRoutes');
 const { userRouter } = require('./routes/usersRoutes');
 const { authRouter } = require('./routes/authRoutes');
+const { errors } = require('celebrate');
 const { authorize } = require('./middlewares/auth');
+const { errorHandler } = require('./middlewares/errorHandler');
 
 const app = express();
 const PORT = 3000;
@@ -21,11 +23,9 @@ app.use('/', (req, res) => {
   res.status(404).send({ message: 'A solicitação não foi encontrada' });
 });
 
-app.use((error, req, res, next)=> {
-  const {statusCode = 500, message = 'Ocorreu um erro no servidor'} = error;
+app.use(errors());
 
-  res.status(statusCode).send({ message });
-})
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);
