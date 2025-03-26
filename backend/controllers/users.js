@@ -1,5 +1,3 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const validator = require('validator');
 const User = require('../models/user');
 const NotFoundError = require('../errors/notFoundError');
@@ -16,23 +14,6 @@ function getUserInfo(req, res, next) {
   )
   .then((user)=> res.send(user))
   .catch((error)=> {
-    next(error);
-  })
-}
-
-function createUser(req, res, next) {
-  const { name, about, avatar, email, password } = req.body;
-
-  bcrypt.hash(password, 10)
-  .then((hash)=> User.create({ name, about, avatar, email, password: hash}))
-  .then((user) => {
-    if(!user) {
-      throw new ServerError(`Não foi possível criar o usuário ${name}`)
-    }
-
-    res.status(201).send({ email: user.email, _id: user._id})
-  })
-  .catch((error) => {
     next(error);
   })
 }
@@ -87,20 +68,6 @@ function updateProfileAvatar(req, res, next) {
     });
 }
 
-function login(req, res, next) {
-  const { email, password } = req.body;
-
-  return User.findUserByCredentials(email, password)
-  .then((user)=> {
-    const token = jwt.sign({ _id: user._id }, 'chave', { expiresIn: '7d' });
-
-    res.send({token});
-  })
-  .catch((error)=> {
-    next(error);
-  })
-}
-
 module.exports = {
-  getUserInfo, createUser, updateProfileInfo, updateProfileAvatar, login,
+  getUserInfo, updateProfileInfo, updateProfileAvatar,
 };

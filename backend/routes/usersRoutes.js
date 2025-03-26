@@ -7,16 +7,16 @@ const { validateURL } = require('../middlewares/validation');
 
 const userRouter = express.Router();
 
-userRouter.get('/me', getUserInfo);
+userRouter.get('/users/me', getUserInfo);
 
-userRouter.patch('/me', celebrate({
+userRouter.patch('/users/me', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30)
   })
 }), updateProfileInfo);
 
-userRouter.patch('/me/avatar', celebrate({
+userRouter.patch('/users/me/avatar', celebrate({
   body: Joi.object().keys({
     avatar: Joi.string().custom(validateURL)
   })

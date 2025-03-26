@@ -7,28 +7,28 @@ const { validateURL } = require('../middlewares/validation');
 
 const cardsRouter = express.Router();
 
-cardsRouter.get('/', getCards);
+cardsRouter.get('/cards', getCards);
 
-cardsRouter.post('/', celebrate({
+cardsRouter.post('/cards', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30).required(),
     link: Joi.string().custom(validateURL).required()
   })
 }), createCard);
 
-cardsRouter.delete('/:id', celebrate({
+cardsRouter.delete('/cards/:id', celebrate({
   params: Joi.object().keys({
     id: Joi.string().required(),
   })
 }), deleteCard);
 
-cardsRouter.put('/:id/likes', celebrate({
+cardsRouter.put('/cards/:id/likes', celebrate({
   params: Joi.object().keys({
     id: Joi.string().required(),
   })
 }), likeCard);
 
-cardsRouter.delete('/:id/likes', celebrate({
+cardsRouter.delete('/cards/:id/likes', celebrate({
   params: Joi.object().keys({
     id: Joi.string().required(),
   })
