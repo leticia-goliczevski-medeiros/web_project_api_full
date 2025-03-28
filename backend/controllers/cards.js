@@ -1,5 +1,5 @@
-const Card = require('../models/card');
 const validator = require('validator');
+const Card = require('../models/card');
 const NotFoundError = require('../errors/notFoundError');
 const InvalidDataError = require('../errors/invalidDataError');
 const ServerError = require('../errors/serverError');
@@ -7,8 +7,8 @@ const ServerError = require('../errors/serverError');
 function getCards(req, res, next) {
   Card.find({})
     .populate(['owner', 'likes'])
-    .orFail(()=> {
-      throw new NotFoundError(`Não foi possível encontrar os cards.`)
+    .orFail(() => {
+      throw new NotFoundError('Não foi possível encontrar os cards.');
     })
     .then((card) => res.send(card))
     .catch((error) => {
@@ -43,7 +43,7 @@ function deleteCard(req, res, next) {
   const { id: cardId } = req.params;
 
   Card.findByIdAndDelete(cardId)
-    .orFail(()=> {
+    .orFail(() => {
       throw new ServerError(`Não foi possível deletar o card com o id ${cardId}`);
     })
     .then((card) => res.send(card))
@@ -52,11 +52,11 @@ function deleteCard(req, res, next) {
     });
 }
 
-function likeCard(req, res, next) {
+function addCardLike(req, res, next) {
   const { id: cardId } = req.params;
 
   Card.findByIdAndUpdate(cardId, { $addToSet: { likes: req.user._id } }, { new: true })
-    .orFail(()=> {
+    .orFail(() => {
       throw new ServerError(`Não foi possível adicionar a curtida ao card com o id ${cardId}.`);
     })
     .then((card) => res.send(card))
@@ -65,12 +65,12 @@ function likeCard(req, res, next) {
     });
 }
 
-function dislikeCard(req, res, next) {
+function removeCardLike(req, res, next) {
   const { id: cardId } = req.params;
 
   Card.findByIdAndUpdate(cardId, { $pull: { likes: req.user._id } }, { new: true })
-    .orFail(()=> {
-      throw new ServerError(`Não foi possível remover a curtida do card com o id ${cardId}.`)
+    .orFail(() => {
+      throw new ServerError(`Não foi possível remover a curtida do card com o id ${cardId}.`);
     })
     .then((card) => res.send(card))
     .catch((error) => {
@@ -79,5 +79,5 @@ function dislikeCard(req, res, next) {
 }
 
 module.exports = {
-  getCards, createCard, deleteCard, likeCard, dislikeCard,
+  getCards, createCard, deleteCard, addCardLike, removeCardLike,
 };

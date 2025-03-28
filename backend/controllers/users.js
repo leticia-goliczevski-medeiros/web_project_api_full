@@ -4,18 +4,17 @@ const NotFoundError = require('../errors/notFoundError');
 const ServerError = require('../errors/serverError');
 const InvalidDataError = require('../errors/invalidDataError');
 
-function getUserInfo(req, res, next) {
+function getUser(req, res, next) {
   const userId = req.user._id;
 
   User.findById(userId)
-  .orFail(()=> {
-      throw new NotFoundError(`Não foi possível encontrar o usuário com o id ${id}`);
-    }
-  )
-  .then((user)=> res.send(user))
-  .catch((error)=> {
-    next(error);
-  })
+    .orFail(() => {
+      throw new NotFoundError(`Não foi possível encontrar o usuário com o id ${userId}`);
+    })
+    .then((user) => res.send(user))
+    .catch((error) => {
+      next(error);
+    });
 }
 
 function updateProfileInfo(req, res, next) {
@@ -23,7 +22,7 @@ function updateProfileInfo(req, res, next) {
   const { name, about } = req.body;
 
   if (!name || !about) {
-    throw new InvalidDataError('Não foi possível atualizar os dados do usuário. Dados incompletos.')
+    throw new InvalidDataError('Não foi possível atualizar os dados do usuário. Dados incompletos.');
   }
 
   User.findByIdAndUpdate(userId, { name, about }, {
@@ -31,16 +30,16 @@ function updateProfileInfo(req, res, next) {
     runValidators: true,
     upsert: false,
   })
-  .orFail(()=> {
-    throw new ServerError(`Não foi possível atualizar o usuário ${name}`);
-  })
-  .then((user) => res.send(user))
-  .catch((error) => {
-    next(error);
-  });
+    .orFail(() => {
+      throw new ServerError(`Não foi possível atualizar o usuário ${name}`);
+    })
+    .then((user) => res.send(user))
+    .catch((error) => {
+      next(error);
+    });
 }
 
-function updateProfileAvatar(req, res, next) {
+function updateProfilePicture(req, res, next) {
   const userId = req.user._id;
   const { avatar } = req.body;
 
@@ -59,8 +58,8 @@ function updateProfileAvatar(req, res, next) {
     runValidators: true,
     upsert: false,
   })
-    .orFail(()=> {
-      throw new ServerError(`Não foi possível atualizar a foto de usuário.`);
+    .orFail(() => {
+      throw new ServerError('Não foi possível atualizar a foto de usuário.');
     })
     .then((user) => res.send(user))
     .catch((error) => {
@@ -69,5 +68,5 @@ function updateProfileAvatar(req, res, next) {
 }
 
 module.exports = {
-  getUserInfo, updateProfileInfo, updateProfileAvatar,
+  getUser, updateProfileInfo, updateProfilePicture,
 };

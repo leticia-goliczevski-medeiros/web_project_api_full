@@ -7,31 +7,35 @@ function login(req, res, next) {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
-  .then((user)=> {
-    const token = jwt.sign({ _id: user._id }, 'chave', { expiresIn: '7d' });
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, 'chave', { expiresIn: '7d' });
 
-    res.send({token});
-  })
-  .catch((error)=> {
-    next(error);
-  })
+      res.send({ token });
+    })
+    .catch((error) => {
+      next(error);
+    });
 }
 
 function createUser(req, res, next) {
-  const { name, about, avatar, email, password } = req.body;
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
 
   bcrypt.hash(password, 10)
-  .then((hash)=> User.create({ name, about, avatar, email, password: hash}))
-  .then((user) => {
-    if(!user) {
-      throw new ServerError(`Não foi possível criar o usuário ${name}`)
-    }
+    .then((hash) => User.create({
+      name, about, avatar, email, password: hash,
+    }))
+    .then((user) => {
+      if (!user) {
+        throw new ServerError(`Não foi possível criar o usuário ${name}`);
+      }
 
-    res.status(201).send({ email: user.email, _id: user._id})
-  })
-  .catch((error) => {
-    next(error);
-  })
+      res.status(201).send({ email: user.email, _id: user._id });
+    })
+    .catch((error) => {
+      next(error);
+    });
 }
 
 module.exports = { login, createUser };

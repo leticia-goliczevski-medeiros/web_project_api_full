@@ -1,8 +1,7 @@
 const validator = require('validator');
-const { Joi, celebrate} = require('celebrate');
 
 function validateURL(value, helpers) {
-  if(validator.isURL(value)) {
+  if (validator.isURL(value)) {
     return value;
   }
 
@@ -10,7 +9,7 @@ function validateURL(value, helpers) {
 }
 
 function validateEmail(value, helpers) {
-  if(validator.isEmail(value)) {
+  if (validator.isEmail(value)) {
     return value;
   }
 

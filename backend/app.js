@@ -1,9 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const { errors } = require('celebrate');
 const { cardsRouter } = require('./routes/cardsRoutes');
 const { userRouter } = require('./routes/usersRoutes');
 const { authRouter } = require('./routes/authRoutes');
-const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { authorize } = require('./middlewares/auth');
 const { errorHandler } = require('./middlewares/errorHandler');
