@@ -11,7 +11,7 @@ function authorize(req, res, next) {
   let payload;
 
   try {
-    payload = jwt.verify(token, 'chave');
+    payload = jwt.verify(token, process.env.JWT_KEY);
   } catch (err) {
     return res.status(401).send({ message: 'Autorização necessária.' });
   }

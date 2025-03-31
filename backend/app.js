@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
@@ -9,9 +10,13 @@ const { authorize } = require('./middlewares/auth');
 const { errorHandler } = require('./middlewares/errorHandler');
 
 const app = express();
-const PORT = 3000;
 
-mongoose.connect('mongodb://0.0.0.0:27017/aroundb');
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('Banco de dados conectado!'))
+.catch((error) => console.log('Erro ao conectar o banco de dados: ', error));
 
 app.use(express.json());
 
@@ -32,6 +37,6 @@ app.use(errors());
 
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`App listening at port ${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`App listening at port ${process.env.PORT}`);
 });

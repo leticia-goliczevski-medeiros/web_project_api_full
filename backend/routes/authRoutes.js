@@ -8,7 +8,7 @@ const authRouter = express.Router();
 authRouter.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().custom(validateEmail).required(),
-    password: Joi.string().required(),
+    password: Joi.string().required().min(8),
   }),
 }), login);
 
