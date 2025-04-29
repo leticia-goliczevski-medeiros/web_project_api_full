@@ -10,7 +10,7 @@ function getCards(req, res, next) {
     .orFail(() => {
       throw new NotFoundError('Não foi possível encontrar os cards.');
     })
-    .then((card) => res.send(card))
+    .then((cards) => res.send(cards))
     .catch((error) => {
       next(error);
     });

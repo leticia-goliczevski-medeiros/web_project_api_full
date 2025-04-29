@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const { errors } = require('celebrate');
 const { cardsRouter } = require('./routes/cardsRoutes');
 const { userRouter } = require('./routes/usersRoutes');
@@ -18,6 +19,10 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('Banco de dados conectado!'))
 .catch((error) => console.log('Erro ao conectar o banco de dados: ', error));
 
+app.use(cors({
+  origin: 'http://localhost:3001'
+}));
+
 app.use(express.json());
 
 app.use(requestLogger);
@@ -26,10 +31,6 @@ app.use(authRouter);
 
 app.use(authorize, cardsRouter);
 app.use(authorize, userRouter);
-
-// app.use('/', (req, res) => {
-//   res.status(404).send({ message: 'A solicitação não foi encontrada' });
-// });
 
 app.use(errorLogger);
 
