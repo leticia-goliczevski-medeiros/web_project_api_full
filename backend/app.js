@@ -19,9 +19,8 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('Banco de dados conectado!'))
 .catch((error) => console.log('Erro ao conectar o banco de dados: ', error));
 
-app.use(cors({
-  origin: 'http://localhost:3001'
-}));
+app.use(cors());
+app.options('*', cors());
 
 app.use(express.json());
 

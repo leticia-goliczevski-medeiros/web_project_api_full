@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const ServerError = require('../errors/serverError');
+const ConflictError = require('../errors/conflictError');
 
 function login(req, res, next) {
   const { email, password } = req.body;
@@ -34,6 +35,9 @@ function createUser(req, res, next) {
       res.status(201).send({ email: user.email, _id: user._id });
     })
     .catch((error) => {
+      if (error.code === 11000) {
+        return next(new ConflictError('Esse email já foi registrado.'));
+      }
       next(error);
     });
 }
