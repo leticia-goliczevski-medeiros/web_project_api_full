@@ -43,6 +43,7 @@ function deleteCard(req, res, next) {
   const { id: cardId } = req.params;
 
   Card.findByIdAndDelete(cardId)
+    .populate(['owner', 'likes'])
     .orFail(() => {
       throw new ServerError(`Não foi possível deletar o card com o id ${cardId}`);
     })
@@ -56,6 +57,7 @@ function addCardLike(req, res, next) {
   const { id: cardId } = req.params;
 
   Card.findByIdAndUpdate(cardId, { $addToSet: { likes: req.user._id } }, { new: true })
+    .populate(['owner', 'likes'])
     .orFail(() => {
       throw new ServerError(`Não foi possível adicionar a curtida ao card com o id ${cardId}.`);
     })
@@ -69,6 +71,7 @@ function removeCardLike(req, res, next) {
   const { id: cardId } = req.params;
 
   Card.findByIdAndUpdate(cardId, { $pull: { likes: req.user._id } }, { new: true })
+    .populate(['owner', 'likes'])
     .orFail(() => {
       throw new ServerError(`Não foi possível remover a curtida do card com o id ${cardId}.`);
     })
