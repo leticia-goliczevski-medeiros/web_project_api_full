@@ -16,8 +16,8 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://0.0.0.0:27017/aroundb', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log('Banco de dados conectado!'))
-.catch((error) => console.log('Erro ao conectar o banco de dados: ', error));
+  .then(() => console.log('Banco de dados conectado!'))
+  .catch((error) => console.log('Erro ao conectar o banco de dados: ', error));
 
 app.use(cors());
 app.options('*', cors());

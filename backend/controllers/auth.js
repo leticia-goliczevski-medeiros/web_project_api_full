@@ -29,7 +29,7 @@ function createUser(req, res, next) {
     }))
     .then((user) => {
       if (!user) {
-        throw new ServerError(`Não foi possível criar o usuário.`);
+        throw new ServerError('Não foi possível criar o usuário.');
       }
 
       res.status(201).send({ email: user.email, _id: user._id });
@@ -38,7 +38,7 @@ function createUser(req, res, next) {
       if (error.code === 11000) {
         return next(new ConflictError('Esse email já foi registrado.'));
       }
-      next(error);
+      return next(error);
     });
 }
 
