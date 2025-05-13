@@ -12,7 +12,7 @@ const { errorHandler } = require('./middlewares/errorHandler');
 
 const app = express();
 
-mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect(process.env.MONGO_URI || 'mongodb://0.0.0.0:27017/aroundb', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
@@ -37,6 +37,6 @@ app.use(errors());
 
 app.use(errorHandler);
 
-app.listen(process.env.PORT, () => {
-  console.log(`App listening at port ${process.env.PORT}`);
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`App listening at port ${process.env.PORT || 3000}`);
 });
