@@ -1,0 +1,99 @@
+.form {
+  max-width: 358px;
+  padding: 60px 0 80px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.form__title {
+  font-family: 'Inter', Arial, sans-serif;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 1.21;
+  margin-bottom: 50px;
+}
+.form__inputs {
+  margin-bottom: 216px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+}
+.form__input {
+  background-color: #000;
+  padding: 0 0 13px;
+  border: none;
+  border-bottom: 1px solid #CCCCCC;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.21;
+  color: #CCCCCC;
+}
+.form__input:focus {
+  outline: none;
+}
+.form__input-error {
+  margin: 0;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.21;
+  font-weight: 400;
+  color: #ff0000;
+  height: 30px;
+}
+.form__input-error_email {
+  position: absolute;
+  top: 200px;
+}
+.form__input-error_password {
+  position: absolute;
+  top: 260px;
+}
+.form__submit-button {
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.21;
+  width: 100%;
+  padding: 14px 84px;
+  border-radius: 2px;
+  background-color: #fff;
+  color: #000;
+  border: none;
+  cursor: pointer;
+}
+.form__submit-button:hover {
+  background-color: rgba(255, 255, 255, 0.75);
+}
+.form__text {
+  margin: 15px auto 0;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.21;
+}
+.form__link {
+  text-decoration: none;
+  color: #fff;
+}
+
+@media screen and (max-width: 720px) {
+  .form {
+    max-width: 260px;
+    padding: 40px 0px 42px;
+  }
+  .form__title {
+    font-size: 20px;
+  }
+  .form__inputs {
+    margin-bottom: 176px;
+  }
+  .form__submit-button {
+    font-size: 16px;
+    padding: 14px 35px;
+  }
+  .form__text {
+    margin: 20px auto 0;
+    font-size: 12px;
+  }
+}

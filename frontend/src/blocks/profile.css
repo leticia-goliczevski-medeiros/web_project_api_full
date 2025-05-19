@@ -1,0 +1,156 @@
+.profile {
+  max-width: 880px;
+  margin: 0 auto;
+  padding-top: 40px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+}
+.profile__picture {
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  margin-right: 30px;
+  object-fit: cover;
+}
+.profile__picture-container:hover .profile__picture {
+  opacity: 0.6;
+  cursor: pointer;
+}
+.profile__picture-container:hover .profile__picture-overlay-edit-icon {
+  visibility: visible;
+  cursor: pointer;
+}
+.profile__picture-overlay-edit-icon {
+  visibility: hidden;
+  width: 26px;
+  height: 26px;
+  position: absolute;
+  top: 100px;
+  left: 60px;
+  transform: translate(-50%, -50%);
+}
+.profile__information {
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+}
+.profile__name-and-icon {
+  display: flex;
+  justify-content: flex-start;
+  column-gap: 18px;
+}
+.profile__name {
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 42px;
+  font-weight: 500;
+  line-height: 1.14;
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 500px;
+}
+.profile__edit-icon {
+  width: 24px;
+  height: 24px;
+  margin-top: 15px;
+}
+.profile__edit-icon:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}
+.profile__description {
+  font-family: "Inter", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.21;
+  margin: 0;
+}
+.profile__add-button {
+  width: 150px;
+  background-color: #000;
+  border: 2px solid #fff;
+  padding: 14px 64px;
+}
+.profile__add-button:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}
+.profile__add-button-plus-sign {
+  width: 22px;
+}
+@media screen and (max-width: 1024px) {
+  .profile {
+    max-width: 700px;
+  }
+  .profile__picture {
+    margin-right: 20px;
+  }
+  .profile__information {
+    max-width: 400px;
+  }
+  .profile__name-and-icon {
+    column-gap: 14px;
+  }
+  .profile__name {
+    font-size: 36px;
+    max-width: 360px;
+  }
+  .profile__edit-icon {
+    margin-top: 10px;
+  }
+  .profile__description {
+    font-size: 16px;
+  }
+}
+@media screen and (max-width: 720px) {
+  .profile {
+    max-width: 282px;
+    margin: 0 auto;
+    padding-top: 42px;
+    flex-direction: column;
+  }
+  .profile__picture {
+    margin-right: 0;
+    margin-bottom: 30px;
+  }
+  .profile__picture-overlay-edit-icon {
+    left: 140px;
+  }
+  .profile__information {
+    margin-right: 0;
+    margin-bottom: 36px;
+    row-gap: 14px;
+    max-width: 282px;
+  }
+  .profile__name-and-icon {
+    justify-content: center;
+    column-gap: 10px;
+  }
+  .profile__name {
+    font-size: 22px;
+    line-height: 1.21;
+    max-width: 320px;
+  }
+  .profile__edit-icon {
+    width: 18px;
+    height: 18px;
+    margin-top: 4px;
+  }
+  .profile__description {
+    font-size: 14px;
+    text-align: center;
+  }
+  .profile__add-button {
+    width: 100%;
+    background-color: #000;
+    border: 2px solid #fff;
+    padding: 17px 133px;
+  }
+  .profile__add-button-plus-sign {
+    width: 16px;
+  }
+}
