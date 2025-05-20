@@ -26,6 +26,12 @@ app.use(express.json());
 
 app.use(requestLogger);
 
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('O servidor travará agora');
+  }, 0);
+});
+
 app.use(authRouter);
 
 app.use(authorize, cardsRouter);
