@@ -12,6 +12,10 @@ const { errorHandler } = require('./middlewares/errorHandler');
 
 const app = express();
 
+app.get('/test-health', (req, res) => {
+  res.send({ status: 'ok' });
+});
+
 mongoose.connect(process.env.MONGO_URI || 'mongodb://0.0.0.0:27017/aroundb', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
