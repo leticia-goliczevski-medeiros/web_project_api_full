@@ -16,6 +16,12 @@ app.get('/test-health', (req, res) => {
   res.send({ status: 'ok' });
 });
 
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('O servidor travará agora');
+  }, 0);
+});
+
 mongoose.connect(process.env.MONGO_URI || 'mongodb://0.0.0.0:27017/aroundb', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -29,12 +35,6 @@ app.options('*', cors());
 app.use(express.json());
 
 app.use(requestLogger);
-
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('O servidor travará agora');
-  }, 0);
-});
 
 app.use(authRouter);
 
