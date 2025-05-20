@@ -30,3 +30,6 @@ Around the U.S. é uma página interativa, onde os usuários podem compartilhar 
 - **MongoDB**: Banco de dados NoSQL.
 - **Mongoose**: Intermediador entre a API e o MongoDB.
 - **JSON Web Token**: Sistema de autenticação baseado em tokens.
+
+## 🌐	Site
+Disponível em: https://web-project-api-full-seven.vercel.app/
