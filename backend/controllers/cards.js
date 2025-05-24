@@ -33,6 +33,7 @@ function createCard(req, res, next) {
   Card.create({
     name, link, owner: userId, likes: [], createdAt: Date.now(),
   })
+    .then((card) => card.populate('owner'))
     .then((card) => res.send(card))
     .catch((error) => {
       next(error);
