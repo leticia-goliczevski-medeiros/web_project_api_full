@@ -26,7 +26,7 @@ export default function AppProviders({children}) {
         setCurrentUser(userObject);
         localStorage.setItem("CurrentUser", JSON.stringify(userObject));
       })
-      .catch((error) => console.log(error, token));
+      .catch((error) => console.error(error));
   };
 
   function handleAvatarUpdate(avatarLink, token) {
@@ -35,7 +35,7 @@ export default function AppProviders({children}) {
         setCurrentUser(userObject);
         localStorage.setItem("CurrentUser", JSON.stringify(userObject));
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
   
   return (

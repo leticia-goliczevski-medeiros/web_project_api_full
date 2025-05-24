@@ -37,9 +37,9 @@ function App() {
   function handleAddPlaceSubmit(name, link) {
     api.addCard(name, link, token)
       .then((addedCard) => {
-        setCards([addedCard, ...cards]);
+        setCards([...cards, addedCard]);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   }
 
   const newCardPopup = { title: "Novo card", children: <NewCard onAddPlaceSubmit={handleAddPlaceSubmit} /> };
@@ -54,7 +54,7 @@ function App() {
             })
           })
         })
-        .catch((error) => console.log(error))
+        .catch((error) => console.error(error))
     } else {
       api.addCardLike(card._id, token)
         .then((updatedCard) => {
@@ -64,7 +64,7 @@ function App() {
             })
           })
         })
-        .catch((error) => console.log(error));
+        .catch((error) => console.error(error));
     }
   }
 
@@ -73,7 +73,7 @@ function App() {
       .then(() => {
         setCards((cards) => cards.filter((currentCard) => currentCard._id !== card._id));
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   }
 
   function handleUserRegister({password, email}) {
@@ -93,7 +93,7 @@ function App() {
         setPopup(infoTooltip);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         let infoTooltip = {title: 'Ops, algo deu errado! Por favor, tente novamente.', children: <InfoTooltip registerStataus={false} />, infoTooltip: true};
 
         setPopup(infoTooltip);
@@ -122,7 +122,7 @@ function App() {
             localStorage.setItem("CurrentUser", JSON.stringify(userObject));
             navigate("/");
           })
-          .catch((error) => console.log(error))
+          .catch((error) => console.error(error))
           
         api
           .getCards(data.token)
@@ -130,10 +130,10 @@ function App() {
             setCards(cardsList);
           })
           .catch((error) => {
-            console.log(error);
+            console.error(error);
           })
       })
-      .catch((error) => console.log(error))
+      .catch((error) => console.error(error))
       .finally(()=> setIsLoading(false)); 
   }
 
@@ -155,7 +155,7 @@ function App() {
         localStorage.setItem("CurrentUser", JSON.stringify(userObject));
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         localStorage.removeItem('UserIdentifier');
         navigate("/signin");
       })
@@ -167,7 +167,7 @@ function App() {
         setCards(cardsList);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       })
       .finally(()=> setIsLoading(false))
   },[setIsLoggedIn, setUserEmail, setCurrentUser, navigate])
